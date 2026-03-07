@@ -1,8 +1,12 @@
-import { useContext } from "react"
-import { taskContext } from "../contexts/tasksContext"
+type Props = {
+  setShowModal: React.Dispatch<React.SetStateAction<Boolean>>
+  registerToEdit: any
+  editRegister: () => void
+  handleEditInput: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void
+}
 
-function EditRegisterModal() {
-   const {states: {  setShowModal, registerToEdit }, functions: {editRegister, handleEditInput} } = useContext(taskContext)!
+
+function EditRegisterModal({setShowModal, registerToEdit, editRegister, handleEditInput}: Props) {
 
   return (
     <div>
