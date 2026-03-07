@@ -12,7 +12,7 @@ Aplicação frontend de CRUD desenvolvida com React e TypeScript.
 1. Clone o repositório:
 
 ```bash
-[git clone https://github.com/seu-usuario/seu-repo.git](https://github.com/Fguimaraes12/CRUD-typescript.git)
+git clone https://github.com/Fguimaraes12/CRUD-typescript.git
 ```
 
 2. Instale as dependências:
