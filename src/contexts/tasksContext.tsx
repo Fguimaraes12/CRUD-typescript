@@ -19,6 +19,7 @@ type Register = {
 
 export type RegisterForm = Omit<Register, "id">
 
+
 type TasksContextType = {
   states: {
     registers: Register[]
