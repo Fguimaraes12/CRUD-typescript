@@ -1,4 +1,5 @@
-import { createContext, type ReactNode, useState } from "react"
+import { createContext, type ReactNode, useReducer, useState } from "react"
+import RegisterReducer, { initialState } from "../reducers/RegisterReducer"
 
 /* ================= TIPAGENS ================= */
 type TasksProviderProps = {
@@ -8,7 +9,7 @@ type TasksProviderProps = {
 type Level = "Junior" | "Pleno" | "Senior"
 type Area = "Frontend" | "Backend" | "Mobile" | "Data" | "DevOps"
 
-type Register = {
+export type Register = {
   id: number
   name: string
   email: string
@@ -45,9 +46,10 @@ export const taskContext = createContext<TasksContextType | null>(null)
 /* ================= PROVIDER ================= */
 function TasksProvider({ children }: TasksProviderProps) {
 
-  const [showModal, setShowModal] = useState<Boolean>(false)
-  const [registers, setRegisters] = useState<Register[]>([])
-  const [registerToEdit, setRegisterToEdit] = useState<Register | null>(null)
+  const [state, dispatch] = useReducer(RegisterReducer, initialState) 
+  const [showModal, setShowModal] = useState<Boolean>(false) // toggle do modal
+  const [registers, setRegisters] = useState<Register[]>([]) // armazena os registros
+  const [registerToEdit, setRegisterToEdit] = useState<Register | null>(null) // Novo registro editado
   const [form, setForm] = useState<RegisterForm>({
     name: "",
     email: "",
@@ -67,6 +69,8 @@ function TasksProvider({ children }: TasksProviderProps) {
       ...form
     }
     setRegisters(prev => [...prev, newRegister])
+    dispatch({type: "ADD_REGISTER", payload: newRegister})
+    console.log(state)
     setForm({
       name: "",
       email: "",
