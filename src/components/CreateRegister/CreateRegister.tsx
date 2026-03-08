@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { taskContext } from "../../contexts/tasksContext"
-import EditRegisterModal from "../EditRegisterModal/editRegisterModal"
+import EditRegisterModal from "../EditRegisterModal/EditRegisterModal"
 
 function CreateRegister(){
   const {
@@ -43,5 +43,6 @@ function CreateRegister(){
     </div>
   )
 }
+
 
 export default CreateRegister;
