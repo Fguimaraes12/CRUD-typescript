@@ -64,13 +64,13 @@ function TasksProvider({ children }: TasksProviderProps) {
   }
 
   function handleSubmit() {
-    const newRegister: Register = {
+    if(form.email.trim() !== "" && form.name.trim() !== ""){
+      const newRegister: Register = {
       id: Date.now(),
       ...form
     }
     setRegisters(prev => [...prev, newRegister])
     dispatch({type: "ADD_REGISTER", payload: newRegister})
-    console.log(state)
     setForm({
       name: "",
       email: "",
@@ -78,6 +78,7 @@ function TasksProvider({ children }: TasksProviderProps) {
       area: "Frontend",
       note: "",
     })
+    }
   }
 
   function deleteRegister(id: number) {
