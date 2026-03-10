@@ -11,8 +11,8 @@ function EditRegisterModal({setShowModal, registerToEdit, editRegister, handleEd
   return (
     <div>
       <form action={editRegister}>
-        <input type="text" name="name" defaultValue={registerToEdit?.name} onChange={(e) => handleEditInput(e)} />
-        <input type="text" name="email" defaultValue={registerToEdit?.email} onChange={(e) => handleEditInput(e)}/>
+        <input required type="text" name="name" defaultValue={registerToEdit?.name} onChange={(e) => handleEditInput(e)} />
+        <input required type="text" name="email" defaultValue={registerToEdit?.email} onChange={(e) => handleEditInput(e)}/>
 
         <select name="level" value={registerToEdit?.level ?? ""} onChange={(e) => handleEditInput(e)}>
           <option value="Junior">Junior</option>

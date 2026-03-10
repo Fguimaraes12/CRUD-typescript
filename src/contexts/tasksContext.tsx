@@ -1,4 +1,5 @@
-import { createContext, type ReactNode, useState } from "react"
+import { createContext, type ReactNode, useReducer, useState } from "react"
+import registerReducer, { initialState } from "../reducer/RegisterReducer"
 
 /* ================= TIPAGENS ================= */
 type TasksProviderProps = {
@@ -44,7 +45,7 @@ export const taskContext = createContext<TasksContextType | null>(null)
 
 /* ================= PROVIDER ================= */
 function TasksProvider({ children }: TasksProviderProps) {
-
+  const [state, dispatch] = useReducer(registerReducer, initialState)
   const [showModal, setShowModal] = useState<Boolean>(false)
   const [registers, setRegisters] = useState<Register[]>([])
   const [registerToEdit, setRegisterToEdit] = useState<Register | null>(null)
@@ -62,18 +63,25 @@ function TasksProvider({ children }: TasksProviderProps) {
   }
 
   function handleSubmit() {
-    const newRegister: Register = {
-      id: Date.now(),
-      ...form
+       if(form.email.trim() !== "" && form.name.trim() !== ""){
+       const newRegister: Register = {
+         id: Date.now(),
+         ...form
+       }
+       setRegisters(prev => [...prev, newRegister])
+       dispatch({type: "ADD_REGISTER", payload: newRegister})
+       setForm({
+         name: "",
+         email: "",
+         level: "Junior",
+         area: "Frontend",
+         note: "",
+       })
+       
+    } else{
+      console.log("Vazio")
     }
-    setRegisters(prev => [...prev, newRegister])
-    setForm({
-      name: "",
-      email: "",
-      level: "Junior",
-      area: "Frontend",
-      note: "",
-    })
+ 
   }
 
   function deleteRegister(id: number) {
