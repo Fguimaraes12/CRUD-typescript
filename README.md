@@ -48,6 +48,6 @@ npm run build
 ## OBSERVAÇÃO !!!!
 
 - Eu não pretendia colocar esse projeto no GitHub pois achei que não tinha tanta necessidade,
-mas decidi colocar pois quero registrar projetos de linguagens que estou aprendendo. 
+mas decidi colocar pois quero registrar projetos de linguagens/frameworks que estou aprendendo. 
 
 - Por isso o repositório já começa com algumas coisas feitas — o ideal seria ter o histórico de commits desde o início, mas não estava nos planos. :)
