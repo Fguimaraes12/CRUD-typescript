@@ -29,6 +29,7 @@ type TasksContextType = {
     setShowModal: React.Dispatch<React.SetStateAction<Boolean>>
     setRegisterToEdit: React.Dispatch<React.SetStateAction<Register | null>>
     registerToEdit: Register | null
+    state: Register[]
     
   },
   functions: {
@@ -41,6 +42,7 @@ type TasksContextType = {
 }
 
 /* ================= CONTEXT ================= */
+
 export const taskContext = createContext<TasksContextType | null>(null)
 
 /* ================= PROVIDER ================= */
@@ -50,13 +52,15 @@ function TasksProvider({ children }: TasksProviderProps) {
   const [showModal, setShowModal] = useState<Boolean>(false) // toggle do modal
   const [registers, setRegisters] = useState<Register[]>([]) // armazena os registros
   const [registerToEdit, setRegisterToEdit] = useState<Register | null>(null) // Novo registro editado
-  const [form, setForm] = useState<RegisterForm>({
+  const [form, setForm] = useState<RegisterForm>({ 
     name: "",
     email: "",
     level: "Junior",
     area: "Frontend",
     note: "",
-  })
+  }) 
+
+  console.log(state)
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
@@ -69,8 +73,7 @@ function TasksProvider({ children }: TasksProviderProps) {
       id: Date.now(),
       ...form
     }
-    setRegisters(prev => [...prev, newRegister])
-    dispatch({type: "ADD_REGISTER", payload: newRegister})
+    dispatch({type: "CREATE_REGISTER", payload: newRegister})
     setForm({
       name: "",
       email: "",
@@ -82,7 +85,7 @@ function TasksProvider({ children }: TasksProviderProps) {
   }
 
   function deleteRegister(id: number) {
-    setRegisters(prev => prev.filter((register) => register.id !== id))
+    dispatch({type: "DELETE_REGISTER", payload: id})
   }
   
   
@@ -93,14 +96,9 @@ function handleEditInput(e: React.ChangeEvent<HTMLInputElement | HTMLSelectEleme
 
 function editRegister() {
   if (!registerToEdit) return
-  setRegisters(prev =>
-    prev.map(register =>
-      register.id === registerToEdit.id ? registerToEdit : register
-    )
-  )
+  dispatch({type: "UPDATE_REGISTER", payload: registerToEdit})
   setShowModal(false)
 }
-
 
   /* ================= VALUE DO CONTEXT ================= */
   const valueContext: TasksContextType = {
@@ -111,6 +109,7 @@ function editRegister() {
       setShowModal,
       setRegisterToEdit,
       registerToEdit,
+      state
     },
     functions: {
       handleInput,

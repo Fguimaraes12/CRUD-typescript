@@ -1,17 +1,19 @@
 import { useContext } from "react"
-import { taskContext } from "../contexts/tasksContext"
+import { taskContext, type Register } from "../contexts/tasksContext"
+
 
 function RegisterPages() {
   const {
-    states: { registers, setShowModal, setRegisterToEdit },
+    states: { state, setShowModal, setRegisterToEdit },
     functions: { deleteRegister }
   } = useContext(taskContext)!
+
 
   return (
     <>
       {/* LISTA DE REGISTROS */}
       <ul>
-        {registers.map((register) => (
+        {state.map((register: Register) => (
           <li key={register.id}>
             <h1>{register.name}</h1>
             <p>{register.email}</p>
