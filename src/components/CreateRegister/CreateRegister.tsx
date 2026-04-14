@@ -76,8 +76,8 @@ function CreateRegister() {
         <EditRegisterModal
           setShowModal={setShowModal}
           registerToEdit={registerToEdit}
-          editRegister={editRegister}
-          handleEditInput={handleEditInput}
+          editRegister={editRegister} // function
+          handleEditInput={handleEditInput} // function
         />
       )}
     </div>

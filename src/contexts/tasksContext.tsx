@@ -1,4 +1,11 @@
-import { createContext, type ReactNode, useReducer, useState } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import RegisterReducer, { initialState } from "../reducers/RegisterReducer";
 
 /* ================= TIPAGENS ================= */
@@ -22,7 +29,6 @@ export type RegisterForm = Omit<Register, "id">;
 
 type TasksContextType = {
   states: {
-    registers: Register[];
     form: RegisterForm;
     showModal: Boolean;
     setShowModal: React.Dispatch<React.SetStateAction<Boolean>>;
@@ -55,7 +61,6 @@ export const taskContext = createContext<TasksContextType | null>(null);
 function TasksProvider({ children }: TasksProviderProps) {
   const [state, dispatch] = useReducer(RegisterReducer, initialState);
   const [showModal, setShowModal] = useState<Boolean>(false); // toggle do modal
-  const [registers, setRegisters] = useState<Register[]>([]); // armazena os registros
   const [registerToEdit, setRegisterToEdit] = useState<Register | null>(null); // Novo registro editado
   const [form, setForm] = useState<RegisterForm>({
     name: "",
@@ -65,7 +70,7 @@ function TasksProvider({ children }: TasksProviderProps) {
     note: "",
   });
 
-  function handleInput(
+  /*   function handleInput(
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
@@ -73,8 +78,20 @@ function TasksProvider({ children }: TasksProviderProps) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   }
+ */
+  const handleInput = useCallback(
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >,
+    ) => {
+      const { name, value } = e.target;
+      setForm((prev) => ({ ...prev, [name]: value }));
+    },
+    [],
+  );
 
-  function handleSubmit() {
+  /*   function handleSubmit() {
     if (form.email.trim() !== "" && form.name.trim() !== "") {
       const newRegister: Register = {
         id: Date.now(),
@@ -90,10 +107,28 @@ function TasksProvider({ children }: TasksProviderProps) {
       });
     }
   }
+ */
+  const handleSubmit = useCallback(() => {
+    if (form.email.trim() !== "" && form.name.trim() !== "") {
+      const newRegister: Register = {
+        id: Date.now(),
+        ...form,
+      };
+      dispatch({ type: "CREATE_REGISTER", payload: newRegister });
+      setForm({
+        name: "",
+        email: "",
+        level: "Junior",
+        area: "Frontend",
+        note: "",
+      });
+    }
+  }, [form]);
 
-  function deleteRegister(id: number) {
+  const deleteRegister = useCallback((id: number) => {
+    console.log("deleteRegister");
     dispatch({ type: "DELETE_REGISTER", payload: id });
-  }
+  }, []);
 
   function handleEditInput(
     e: React.ChangeEvent<
@@ -111,9 +146,8 @@ function TasksProvider({ children }: TasksProviderProps) {
   }
 
   /* ================= VALUE DO CONTEXT ================= */
-  const valueContext: TasksContextType = {
+  /*   const valueContext: TasksContextType = {
     states: {
-      registers,
       form,
       showModal,
       setShowModal,
@@ -128,7 +162,38 @@ function TasksProvider({ children }: TasksProviderProps) {
       editRegister,
       handleEditInput,
     },
-  };
+  }; */
+
+  const valueContext: TasksContextType = useMemo(
+    () => ({
+      states: {
+        form,
+        showModal,
+        setShowModal,
+        setRegisterToEdit,
+        registerToEdit,
+        state,
+      },
+      functions: {
+        handleInput,
+        handleSubmit,
+        deleteRegister,
+        editRegister,
+        handleEditInput,
+      },
+    }),
+    [
+      deleteRegister,
+      handleInput,
+      editRegister,
+      handleEditInput,
+      handleSubmit,
+      form,
+      showModal,
+      registerToEdit,
+      state,
+    ],
+  );
 
   return (
     <taskContext.Provider value={valueContext}>{children}</taskContext.Provider>
